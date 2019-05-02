@@ -14,6 +14,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     let currencyArray = ["AUD", "BRL","CAD","CNY","EUR","GBP","HKD","IDR","ILS","INR","JPY","MXN","NOK","NZD","PLN","RON","RUB","SEK","SGD","USD","ZAR"]
     let currencySymbols = ["$", "R$", "$", "¥", "€", "£", "$", "Rp", "₪", "₹", "¥", "$", "kr", "$", "zł", "lei", "₽", "kr", "$", "$", "R"]
     var finalURL = ""
+    var currencyFinalLabel = ""
 
     //Pre-setup IBOutlets
     @IBOutlet weak var bitcoinPriceLabel: UILabel!
@@ -44,13 +45,11 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        print(currencyArray[row])
-        
         finalURL = baseURL + currencyArray[row]
+        currencyFinalLabel = currencySymbols[row]
         getBitcoinData(url: finalURL)
         print(finalURL)
     }
-    
     
 //    
 //    //MARK: - Networking
@@ -82,8 +81,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     func updateBitcoinData(json : JSON) {
         
         if let bitcoinResult = json["ask"].double {
-            bitcoinPriceLabel.text = "\(bitcoinResult)"
-        
+            bitcoinPriceLabel.text = "\(currencyFinalLabel) \(bitcoinResult)"
         } else {
             bitcoinPriceLabel.text = "Bitcoin Unavailable"
         }
